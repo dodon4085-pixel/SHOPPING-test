@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Dinhata Shop</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+
+<header>
+    <div class="logo">Dinhata Shop</div>
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="cart.html">Cart</a>
+        <a href="admin.html">Admin</a>
+    </nav>
+</header>
+
+<div class="checkout-container">
+    <h2>Checkout</h2>
+
+    <div class="order-summary" style="background:#1a1a1a; padding:20px; border-radius:10px; margin-bottom:20px;">
+        <h3>Order Summary</h3>
+        <div id="checkoutItems"></div>
+
+        <div style="border-top:1px solid #333; padding-top:10px; margin-top:10px;">
+            <strong>Total: ৳<span id="checkoutTotal">0</span></strong>
+        </div>
+    </div>
+
+    <form class="checkout-form" id="checkoutForm">
+        <h3>Delivery Information</h3>
+
+        <input type="text" id="cName" placeholder="Your Full Name" required>
+        <input type="tel" id="cPhone" placeholder="Phone Number" required>
+        <input type="text" id="cAddress" placeholder="Full Delivery Address" required>
+
+        <textarea id="cNotes" placeholder="Additional Notes (Optional)"
+            style="width:100%; height:80px; padding:12px; margin:10px 0; background:#0d0d0d; color:white; border:1px solid #333; border-radius:8px;"></textarea>
+
+        <button type="submit">Place Order</button>
+    </form>
+</div>
+
+<script>
+    // ✅ Load cart items
+    document.addEventListener("DOMContentLoaded", () => {
+        const cart = getCart();
+        const container = document.getElementById("checkoutItems");
+        const totalEl = document.getElementById("checkoutTotal");
+
+        if (cart.length === 0) {
+            container.innerHTML = "<p>Your cart is empty</p>";
+            totalEl.textContent = 0;
+            return;
+        }
+
+        let total = 0;
+        container.innerHTML = cart.map(item => {
+            total += item.price;
+            return `
+                <div style="display:flex; justify-content:space-between;
+                    margin:10px 0; padding:10px; background:#222; border-radius:5px;">
+                    <div>${item.name}</div>
+                    <div>৳${item.price}</div>
+                </div>
+            `;
+        }).join("");
+
+        totalEl.textContent = total;
+    });
+
+    // ✅ Send to Telegram
+    function sendToTelegram(order) {
+        const BOT_TOKEN = "8589527391:AAEF3bCeKx0J-y9dc0KHeJCOolzHLJjYVo4";
+        const CHAT_ID = "7681046220";
+
+        const message = `
+📦 *New Order Received!*
+-------------------------
+🆔 Order ID: ${order.id}
+👤 Name: ${order.name}
+📞 Phone: ${order.phone}
+📍 Address: ${order.address}
+
+💰 Total: ৳${order.total}
+📅 Date: ${order.date}
+
+🛒 *Items:*
+${order.items.map(i => `• ${i.name} - ৳${i.price}`).join("\n")}
+
+📝 Notes: ${order.notes || "None"}
+        `;
+
+        return fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                chat_id: CHAT_ID,
+                text: message,
+                parse_mode: "Markdown"
+            })
+        });
+    }
+
+    // ✅ Send to Google Sheet
+    function sendToGoogleSheet(order) {
+        const SHEET_URL = "https://script.google.com/macros/s/AKfycbxF4aEFiGBLl4RV0lsT8CFnX36VIblTRg2i1wSg_wLHfC6jHSqhltXHCZSSxD9Yur-h_Q/exec";
+
+        return fetch(SHEET_URL, {
+            method: "POST",
+            body: JSON.stringify(order),
+            headers: {"Content-Type": "application/json"}
+        });
+    }
+
+    // ✅ Form Submit
+    document.getElementById("checkoutForm").addEventListener("submit", function(e) {
+        e.preventDefault();
+
+        const cart = getCart();
+        if (cart.length === 0) {
+            alert("Your cart is empty!");
+            return;
+        }
+
+        const orderData = {
+            id: "DIN" + Date.now(),
+            name: document.getElementById('cName').value,
+            phone: document.getElementById('cPhone').value,
+            address: document.getElementById('cAddress').value,
+            notes: document.getElementById('cNotes').value,
+            items: cart,
+            total: cart.reduce((sum, item) => sum + item.price, 0),
+            date: new Date().toLocaleString("bn-BD")
+        };
+
+        // ✅ Send to Telegram + Google Sheet
+        Promise.all([
+            sendToTelegram(orderData),
+            sendToGoogleSheet(orderData)
+        ]).then(() => {
+            localStorage.setItem("dinhata_last_order", JSON.stringify(orderData));
+            localStorage.removeItem("dinhata_cart");
+            window.location.href = "order-success.html";
+        }).catch(error => {
+            console.error("Error placing order:", error);
+            alert("Order placed but there was an issue with notifications.");
+            localStorage.setItem("dinhata_last_order", JSON.stringify(orderData));
+            localStorage.removeItem("dinhata_cart");
+            window.location.href = "order-success.html";
+        });
+    });
+
+    // ✅ Get cart from localStorage
+    function getCart() {
+        return JSON.parse(localStorage.getItem("dinhata_cart")) || [];
+    }
+</script>
+
+</body>
+</html>
