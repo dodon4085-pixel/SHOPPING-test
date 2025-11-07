@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart - Dinhata Buzzer Hub</title>
+    <title>Your Cart - Dinhata Buzzer Hub</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -226,6 +226,266 @@
             alert('Login functionality will be implemented soon!');
             closeLogin();
         });
+    </script>
+
+    <!-- Secret Admin Gesture System -->
+    <script>
+        // --- ENHANCED SECRET ADMIN GESTURE SYSTEM ---
+        let gestureState = {
+            touchStart: {},
+            rotateCount: 0,
+            lastAngle: 0,
+            startTime: 0,
+            isActive: false
+        };
+
+        // Configuration
+        const GESTURE_CONFIG = {
+            REQUIRED_ROTATIONS: 2, // Reduced for easier access
+            ANGLE_CHANGE_THRESHOLD: 45, // Degrees per rotation step
+            TIME_LIMIT: 4000, // Max time to complete gesture (ms)
+            TOUCH_DISTANCE_MIN: 40 // Minimum distance between fingers (pixels)
+        };
+
+        function getAngle(touches) {
+            const dx = touches[1].clientX - touches[0].clientX;
+            const dy = touches[1].clientY - touches[0].clientY;
+            return Math.atan2(dy, dx) * 180 / Math.PI;
+        }
+
+        function getTouchDistance(touches) {
+            const dx = touches[1].clientX - touches[0].clientX;
+            const dy = touches[1].clientY - touches[0].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        function resetGesture() {
+            gestureState.rotateCount = 0;
+            gestureState.isActive = false;
+            gestureState.startTime = 0;
+        }
+
+        function activateAdminMode() {
+            console.log('Admin gesture detected! Redirecting...');
+            
+            // Visual feedback
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(45deg, #00ff00, #008800);
+                z-index: 10000;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 24px;
+                color: white;
+                font-weight: bold;
+            `;
+            overlay.innerHTML = '🔓 Admin Mode Activated! Redirecting...';
+            document.body.appendChild(overlay);
+
+            // Haptic feedback
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100]);
+            }
+
+            setTimeout(() => {
+                window.location.href = "admin.html";
+            }, 1000);
+        }
+
+        document.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 2) {
+                const distance = getTouchDistance(e.touches);
+                
+                // Check if fingers are sufficiently spread
+                if (distance >= GESTURE_CONFIG.TOUCH_DISTANCE_MIN) {
+                    gestureState.touchStart.angle = getAngle(e.touches);
+                    gestureState.lastAngle = gestureState.touchStart.angle;
+                    gestureState.startTime = Date.now();
+                    gestureState.isActive = true;
+                    
+                    // Visual hint
+                    document.body.style.cursor = 'grabbing';
+                }
+            }
+        });
+
+        document.addEventListener("touchmove", (e) => {
+            if (!gestureState.isActive || e.touches.length !== 2) return;
+            
+            // Check time limit
+            if (Date.now() - gestureState.startTime > GESTURE_CONFIG.TIME_LIMIT) {
+                resetGesture();
+                document.body.style.cursor = '';
+                return;
+            }
+            
+            const newAngle = getAngle(e.touches);
+            let angleDiff = newAngle - gestureState.lastAngle;
+            
+            // Handle angle wrapping (360° to 0°)
+            if (angleDiff > 180) angleDiff -= 360;
+            if (angleDiff < -180) angleDiff += 360;
+            
+            // Accumulate rotation count based on threshold
+            if (Math.abs(angleDiff) >= GESTURE_CONFIG.ANGLE_CHANGE_THRESHOLD) {
+                gestureState.rotateCount += Math.sign(angleDiff);
+                gestureState.lastAngle = newAngle;
+                
+                // Provide haptic feedback if available
+                if (navigator.vibrate) {
+                    navigator.vibrate(20);
+                }
+                
+                // Visual progress indicator
+                showGestureProgress();
+                
+                console.log(`Rotation progress: ${Math.abs(gestureState.rotateCount)}/${GESTURE_CONFIG.REQUIRED_ROTATIONS * 2}`);
+            }
+            
+            // Check for completion (both clockwise and counterclockwise)
+            if (Math.abs(gestureState.rotateCount) >= GESTURE_CONFIG.REQUIRED_ROTATIONS * 2) {
+                activateAdminMode();
+                resetGesture();
+            }
+        });
+
+        document.addEventListener("touchend", (e) => {
+            if (e.touches.length < 2) {
+                resetGesture();
+                document.body.style.cursor = '';
+                hideGestureProgress();
+            }
+        });
+
+        function showGestureProgress() {
+            let progressBar = document.getElementById('gesture-progress-bar');
+            if (!progressBar) {
+                progressBar = document.createElement('div');
+                progressBar.id = 'gesture-progress-bar';
+                progressBar.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 200px;
+                    height: 8px;
+                    background: rgba(255,255,255,0.3);
+                    border-radius: 4px;
+                    z-index: 9999;
+                    border: 1px solid rgba(255,255,255,0.5);
+                `;
+                
+                const progressFill = document.createElement('div');
+                progressFill.id = 'gesture-progress-fill';
+                progressFill.style.cssText = `
+                    height: 100%;
+                    background: linear-gradient(90deg, #2874f0, #00ff00);
+                    border-radius: 4px;
+                    transition: width 0.3s ease;
+                    width: 0%;
+                `;
+                
+                progressBar.appendChild(progressFill);
+                document.body.appendChild(progressBar);
+            }
+            
+            const progress = Math.min(100, (Math.abs(gestureState.rotateCount) / (GESTURE_CONFIG.REQUIRED_ROTATIONS * 2)) * 100);
+            const progressFill = document.getElementById('gesture-progress-fill');
+            if (progressFill) {
+                progressFill.style.width = `${progress}%`;
+            }
+        }
+
+        function hideGestureProgress() {
+            const progressBar = document.getElementById('gesture-progress-bar');
+            if (progressBar) {
+                progressBar.remove();
+            }
+        }
+
+        // Keyboard shortcut for development
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+                console.log('Keyboard admin shortcut activated');
+                activateAdminMode();
+            }
+        });
+
+        // Double tap with three fingers
+        let tripleTapCount = 0;
+        let tripleTapTimer;
+
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 3) {
+                tripleTapCount++;
+                
+                if (tripleTapCount === 1) {
+                    tripleTapTimer = setTimeout(() => {
+                        tripleTapCount = 0;
+                    }, 1000);
+                }
+                
+                if (tripleTapCount === 3) {
+                    clearTimeout(tripleTapTimer);
+                    tripleTapCount = 0;
+                    console.log('Triple tap with three fingers detected!');
+                    activateAdminMode();
+                }
+            }
+        });
+
+        // Secret click sequence (click corners)
+        let clickSequence = [];
+        let sequenceTimer;
+
+        document.addEventListener('click', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            // Check if click is in corner (within 50px of corner)
+            if ((x < 50 && y < 50) || // Top-left
+                (x > width - 50 && y < 50) || // Top-right
+                (x < 50 && y > height - 50) || // Bottom-left
+                (x > width - 50 && y > height - 50)) { // Bottom-right
+                
+                clickSequence.push({x, y});
+                clearTimeout(sequenceTimer);
+                sequenceTimer = setTimeout(() => {
+                    clickSequence = [];
+                }, 2000);
+                
+                // Check for pattern: Top-left → Top-right → Bottom-right → Bottom-left
+                if (clickSequence.length >= 4) {
+                    const pattern = clickSequence.slice(-4);
+                    const isPattern = 
+                        pattern[0].x < 50 && pattern[0].y < 50 && // Top-left
+                        pattern[1].x > width - 50 && pattern[1].y < 50 && // Top-right
+                        pattern[2].x > width - 50 && pattern[2].y > height - 50 && // Bottom-right
+                        pattern[3].x < 50 && pattern[3].y > height - 50; // Bottom-left
+                    
+                    if (isPattern) {
+                        console.log('Secret corner pattern detected!');
+                        activateAdminMode();
+                        clickSequence = [];
+                    }
+                }
+            }
+        });
+
+        console.log('🔐 Secret Admin Gesture System Loaded');
+        console.log('Available methods:');
+        console.log('1. Two-finger rotation gesture');
+        console.log('2. Triple tap with three fingers');
+        console.log('3. Corner click pattern (TL→TR→BR→BL)');
+        console.log('4. Keyboard shortcut: Ctrl+Shift+A');
     </script>
 </body>
 </html>
