@@ -3,90 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Successful - Dinhata Shop</title>
+    <title>Order Successful - Dinhata Buzzer Hub</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
-
-    <style>
-        .success-container {
-            text-align: center;
-            padding: 100px 20px;
-            background: #1a1a1a;
-            margin: 100px 20px 30px 20px;
-            border-radius: 15px;
-        }
-        .success-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-        }
-        .order-details {
-            background: #222;
-            padding: 20px;
-            border-radius: 10px;
-            margin: 25px auto;
-            max-width: 500px;
-            text-align: left;
-            border: 1px solid #444;
-        }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-
-<header>
-    <div class="logo">Dinhata Shop</div>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="cart.html">Cart</a>
-        <a href="admin.html">Admin</a>
-    </nav>
-</header>
-
-<div class="success-container">
-    <div class="success-icon">✅</div>
-    <h1 style="color:#ffcc66;">Order Placed Successfully!</h1>
-    <p>Thank you for your order. We will contact you soon for delivery.</p>
-
-    <div class="order-details" id="orderDetails">
-        <!-- Order details load here -->
-    </div>
-
-    <a href="index.html" class="cta-btn" style="display:inline-block; margin-top:20px;">Continue Shopping</a>
-</div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        let order = null;
-
-        try {
-            order = JSON.parse(localStorage.getItem("dinhata_last_order"));
-        } catch (error) {
-            order = null;
-        }
-
-        const box = document.getElementById("orderDetails");
-
-        if (!order) {
-            box.innerHTML = "<p>Order details not found.</p>";
-            return;
-        }
-
-        box.innerHTML = `
-            <h3>Order Summary:</h3>
-            <p><strong>Order ID:</strong> ${order.id}</p>
-            <p><strong>Name:</strong> ${order.name}</p>
-            <p><strong>Phone:</strong> ${order.phone}</p>
-            <p><strong>Address:</strong> ${order.address}</p>
-            <p><strong>Total:</strong> ৳${order.total}</p>
-            <p><strong>Date:</strong> ${order.date}</p>
-            ${order.notes ? `<p><strong>Notes:</strong> ${order.notes}</p>` : ""}
-            <div style="margin-top:15px; padding-top:15px; border-top:1px solid #333;">
-                <strong>Items Ordered:</strong>
-                ${order.items.map(i => `<div style="margin:5px 0;">• ${i.name} - ৳${i.price}</div>`).join("")}
+    <!-- Header -->
+    <header>
+        <div class="top-header">
+            <div class="logo">
+                <i class="fas fa-bolt logo-icon"></i>
+                <h1>Dinhata <span>Buzzer Hub</span></h1>
             </div>
-        `;
-    });
-</script>
+            
+            <div class="user-actions">
+                <div class="action-item" onclick="toggleLogin()">
+                    <i class="fas fa-user"></i>
+                    <span id="loginText">Login</span>
+                </div>
+                <div class="action-item" onclick="window.location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Cart</span>
+                    <div class="cart-count" id="headerCartCount">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <nav>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="products.html"><i class="fas fa-box"></i> Products</a>
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a>
+            </div>
+        </nav>
+    </header>
 
+    <main class="success-page">
+        <div class="success-container">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Order Placed Successfully!</h2>
+            <p>Thank you for your order. We will contact you soon for delivery.</p>
+            
+            <div class="order-details" id="orderDetails">
+                <!-- Order details will load here -->
+            </div>
+            
+            <div class="success-actions">
+                <button class="cta-button" onclick="window.location.href='index.html'">
+                    <i class="fas fa-home"></i> Continue Shopping
+                </button>
+                <button class="secondary-button" onclick="window.location.href='products.html'">
+                    <i class="fas fa-shopping-bag"></i> Browse More Products
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>ABOUT</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>HELP</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Payments</a></li>
+                    <li><a href="#">Shipping</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>POLICY</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Terms Of Use</a></li>
+                    <li><a href="#">Privacy</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>SOCIAL</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 Dinhata Buzzer Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            setupNavigation();
+            loadOrderDetails();
+        });
+
+        function loadOrderDetails() {
+            let order = null;
+            
+            try {
+                order = JSON.parse(localStorage.getItem('dinhata_last_order'));
+            } catch (error) {
+                order = null;
+            }
+            
+            const container = document.getElementById('orderDetails');
+            
+            if (!order) {
+                container.innerHTML = '<p>Order details not found.</p>';
+                return;
+            }
+            
+            container.innerHTML = `
+                <div class="order-info">
+                    <h3>Order Summary</h3>
+                    <div class="info-row">
+                        <span>Order ID:</span>
+                        <span>${order.id}</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Name:</span>
+                        <span>${order.name}</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Phone:</span>
+                        <span>${order.phone}</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Address:</span>
+                        <span>${order.address}</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Pincode:</span>
+                        <span>${order.pincode}</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Total Amount:</span>
+                        <span>₹${order.total}</span>
+                    </div>
+                    <div class="info-row">
+                        <span>Order Date:</span>
+                        <span>${order.date}</span>
+                    </div>
+                    ${order.instructions ? `
+                    <div class="info-row">
+                        <span>Instructions:</span>
+                        <span>${order.instructions}</span>
+                    </div>
+                    ` : ''}
+                </div>
+                
+                <div class="order-items-summary">
+                    <h4>Items Ordered:</h4>
+                    ${order.items.map(item => `
+                        <div class="order-item-summary">
+                            <span>${item.name}</span>
+                            <span>₹${item.price}</span>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function toggleLogin() {
+            alert('Login functionality will be implemented soon!');
+        }
+    </script>
 </body>
 </html>
