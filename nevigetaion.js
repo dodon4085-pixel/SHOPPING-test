@@ -16,3 +16,4 @@ function setupNavigation() {
 document.addEventListener('DOMContentLoaded', function() {
     setupNavigation();
 });
+
