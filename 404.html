@@ -3,61 +3,552 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Page Not Found - Dinhata Shop</title>
+    <title>Page Not Found - Dinhata Buzzer Hub</title>
     <link rel="stylesheet" href="style.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .error-container {
             text-align: center;
-            padding: 120px 20px;
-            margin-top: 80px;
+            padding: 100px 20px;
+            margin-top: 100px;
         }
+        
+        .error-icon {
+            font-size: 80px;
+            color: #2874f0;
+            margin-bottom: 20px;
+        }
+        
         .error-container h1 {
-            color: #ffcc66;
+            color: #2874f0;
             font-size: 48px;
             margin-bottom: 20px;
         }
+        
         .error-container p {
             font-size: 18px;
-            opacity: .8;
+            color: #666;
+            margin-bottom: 30px;
         }
-        .error-links {
-            margin-top: 30px;
+        
+        .error-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
         }
-        .error-links a {
-            display: inline-block;
-            margin: 10px;
+        
+        .error-btn {
             padding: 12px 25px;
-            background: #ffcc66;
-            color: #000;
-            border-radius: 8px;
-            font-weight: 700;
+            background: #2874f0;
+            color: white;
             text-decoration: none;
+            border-radius: 5px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .error-btn:hover {
+            background: #1c5fd1;
+            transform: translateY(-2px);
+        }
+        
+        .error-btn.secondary {
+            background: #666;
+        }
+        
+        .error-btn.secondary:hover {
+            background: #555;
+        }
+
+        /* Shake animation for 404 page */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
+    <header>
+        <div class="top-header">
+            <div class="logo">
+                <i class="fas fa-bolt logo-icon"></i>
+                <h1>Dinhata <span>Buzzer Hub</span></h1>
+            </div>
+            
+            <div class="user-actions">
+                <div class="action-item" onclick="toggleLogin()">
+                    <i class="fas fa-user"></i>
+                    <span id="loginText">Login</span>
+                </div>
+                <div class="action-item" onclick="window.location.href='cart.html'">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Cart</span>
+                    <div class="cart-count" id="headerCartCount">0</div>
+                </div>
+            </div>
+        </div>
+        
+        <nav>
+            <div class="nav-links">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="products.html"><i class="fas fa-box"></i> Products</a>
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i> Cart</a>
+            </div>
+        </nav>
+    </header>
 
-<header>
-    <div class="logo">Dinhata Shop</div>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="cart.html">Cart</a>
-        <a href="admin.html">Admin</a>
-    </nav>
-</header>
+    <div class="error-container">
+        <div class="error-icon">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h1>404 - Page Not Found</h1>
+        <p>দুঃখিত, আপনি যে পেজটিতে যেতে চাইছেন সেটা পাওয়া যায়নি।</p>
+        
+        <div class="error-actions">
+            <button class="error-btn" onclick="window.location.href='index.html'">
+                <i class="fas fa-home"></i> হোমপেজে যান
+            </button>
+            <button class="error-btn" onclick="window.location.href='products.html'">
+                <i class="fas fa-box"></i> সব পণ্য দেখুন
+            </button>
+            <button class="error-btn secondary" onclick="window.location.href='admin.html'">
+                <i class="fas fa-user-cog"></i> অ্যাডমিন প্যানেল
+            </button>
+        </div>
 
-<div class="error-container">
-    <h1>404 - Page Not Found</h1>
-    <p>দুঃখিত, আপনি যে পেজটিতে যেতে চাইছেন সেটা পাওয়া যায়নি।</p>
-
-    <div class="error-links">
-        <a href="index.html">হোমপেজে যান</a>
-        <a href="products.html">সব পণ্য দেখুন</a>
-        <a href="admin.html">অ্যাডমিন প্যানেল</a>
+        <!-- Hidden Easter Egg -->
+        <div style="margin-top: 50px; opacity: 0.1; transition: opacity 0.3s ease;" id="easterEgg">
+            <h3>🎉 আপনি একটি Easter Egg পেয়েছেন!</h3>
+            <p>এই ওয়েবসাইটটি Dinhata Buzzer Hub এর জন্য তৈরি করা হয়েছে</p>
+            <p><small>Secret Code: DBH2024</small></p>
+        </div>
     </div>
-</div>
 
-</body>
-</html>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>ABOUT</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Contact Us</a></li>
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Careers</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>HELP</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Payments</a></li>
+                    <li><a href="#">Shipping</a></li>
+                    <li><a href="#">Returns</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>POLICY</h3>
+                <ul class="footer-links">
+                    <li><a href="#">Return Policy</a></li>
+                    <li><a href="#">Terms Of Use</a></li>
+                    <li><a href="#">Privacy</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h3>SOCIAL</h3>
+                <div class="social-links">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>&copy; 2024 Dinhata Buzzer Hub. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            setupNavigation();
+            
+            // Add shake animation to error icon
+            const errorIcon = document.querySelector('.error-icon');
+            setInterval(() => {
+                errorIcon.classList.add('shake');
+                setTimeout(() => errorIcon.classList.remove('shake'), 500);
+            }, 3000);
+        });
+
+        function toggleLogin() {
+            alert('Login functionality will be implemented soon!');
+        }
+
+        // Easter egg - triple click on error message
+        let clickCount = 0;
+        let clickTimer;
+
+        document.querySelector('.error-container h1').addEventListener('click', function() {
+            clickCount++;
+            clearTimeout(clickTimer);
+            clickTimer = setTimeout(() => {
+                clickCount = 0;
+            }, 1000);
+
+            if (clickCount >= 3) {
+                clickCount = 0;
+                const easterEgg = document.getElementById('easterEgg');
+                easterEgg.style.opacity = '1';
+                
+                // Add confetti effect
+                createConfetti();
+                
+                setTimeout(() => {
+                    easterEgg.style.opacity = '0.1';
+                }, 5000);
+            }
+        });
+
+        function createConfetti() {
+            const colors = ['#2874f0', '#fb641b', '#ff9f00', '#388e3c', '#d32f2f'];
+            const container = document.querySelector('.error-container');
+            
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.innerHTML = '🎉';
+                confetti.style.cssText = `
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    font-size: 20px;
+                    pointer-events: none;
+                    z-index: 1000;
+                `;
+                
+                const angle = Math.random() * Math.PI * 2;
+                const velocity = 2 + Math.random() * 2;
+                const spin = Math.random() * 10 - 5;
+                
+                let x = 0;
+                let y = 0;
+                let opacity = 1;
+                
+                const animate = () => {
+                    x += Math.cos(angle) * velocity;
+                    y += Math.sin(angle) * velocity + 0.5; // gravity
+                    opacity -= 0.02;
+                    
+                    confetti.style.transform = `translate(${x}px, ${y}px) rotate(${spin * x}deg)`;
+                    confetti.style.opacity = opacity;
+                    
+                    if (opacity > 0) {
+                        requestAnimationFrame(animate);
+                    } else {
+                        confetti.remove();
+                    }
+                };
+                
+                container.appendChild(confetti);
+                animate();
+            }
+        }
+    </script>
+
+    <!-- Secret Admin Gesture System for 404 Page -->
+    <script>
+        // --- ENHANCED SECRET ADMIN GESTURE SYSTEM ---
+        let gestureState = {
+            touchStart: {},
+            rotateCount: 0,
+            lastAngle: 0,
+            startTime: 0,
+            isActive: false
+        };
+
+        // Configuration
+        const GESTURE_CONFIG = {
+            REQUIRED_ROTATIONS: 2, // Reduced for easier access
+            ANGLE_CHANGE_THRESHOLD: 45, // Degrees per rotation step
+            TIME_LIMIT: 4000, // Max time to complete gesture (ms)
+            TOUCH_DISTANCE_MIN: 40 // Minimum distance between fingers (pixels)
+        };
+
+        function getAngle(touches) {
+            const dx = touches[1].clientX - touches[0].clientX;
+            const dy = touches[1].clientY - touches[0].clientY;
+            return Math.atan2(dy, dx) * 180 / Math.PI;
+        }
+
+        function getTouchDistance(touches) {
+            const dx = touches[1].clientX - touches[0].clientX;
+            const dy = touches[1].clientY - touches[0].clientY;
+            return Math.sqrt(dx * dx + dy * dy);
+        }
+
+        function resetGesture() {
+            gestureState.rotateCount = 0;
+            gestureState.isActive = false;
+            gestureState.startTime = 0;
+        }
+
+        function activateAdminMode() {
+            console.log('Admin gesture detected! Redirecting...');
+            
+            // Visual feedback
+            const overlay = document.createElement('div');
+            overlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(45deg, #00ff00, #008800);
+                z-index: 10000;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 24px;
+                color: white;
+                font-weight: bold;
+            `;
+            overlay.innerHTML = '🔓 Admin Mode Activated! Redirecting...';
+            document.body.appendChild(overlay);
+
+            // Haptic feedback
+            if (navigator.vibrate) {
+                navigator.vibrate([100, 50, 100]);
+            }
+
+            setTimeout(() => {
+                window.location.href = "admin.html";
+            }, 1000);
+        }
+
+        document.addEventListener("touchstart", (e) => {
+            if (e.touches.length === 2) {
+                const distance = getTouchDistance(e.touches);
+                
+                // Check if fingers are sufficiently spread
+                if (distance >= GESTURE_CONFIG.TOUCH_DISTANCE_MIN) {
+                    gestureState.touchStart.angle = getAngle(e.touches);
+                    gestureState.lastAngle = gestureState.touchStart.angle;
+                    gestureState.startTime = Date.now();
+                    gestureState.isActive = true;
+                    
+                    // Visual hint
+                    document.body.style.cursor = 'grabbing';
+                }
+            }
+        });
+
+        document.addEventListener("touchmove", (e) => {
+            if (!gestureState.isActive || e.touches.length !== 2) return;
+            
+            // Check time limit
+            if (Date.now() - gestureState.startTime > GESTURE_CONFIG.TIME_LIMIT) {
+                resetGesture();
+                document.body.style.cursor = '';
+                return;
+            }
+            
+            const newAngle = getAngle(e.touches);
+            let angleDiff = newAngle - gestureState.lastAngle;
+            
+            // Handle angle wrapping (360° to 0°)
+            if (angleDiff > 180) angleDiff -= 360;
+            if (angleDiff < -180) angleDiff += 360;
+            
+            // Accumulate rotation count based on threshold
+            if (Math.abs(angleDiff) >= GESTURE_CONFIG.ANGLE_CHANGE_THRESHOLD) {
+                gestureState.rotateCount += Math.sign(angleDiff);
+                gestureState.lastAngle = newAngle;
+                
+                // Provide haptic feedback if available
+                if (navigator.vibrate) {
+                    navigator.vibrate(20);
+                }
+                
+                // Visual progress indicator
+                showGestureProgress();
+                
+                console.log(`Rotation progress: ${Math.abs(gestureState.rotateCount)}/${GESTURE_CONFIG.REQUIRED_ROTATIONS * 2}`);
+            }
+            
+            // Check for completion (both clockwise and counterclockwise)
+            if (Math.abs(gestureState.rotateCount) >= GESTURE_CONFIG.REQUIRED_ROTATIONS * 2) {
+                activateAdminMode();
+                resetGesture();
+            }
+        });
+
+        document.addEventListener("touchend", (e) => {
+            if (e.touches.length < 2) {
+                resetGesture();
+                document.body.style.cursor = '';
+                hideGestureProgress();
+            }
+        });
+
+        function showGestureProgress() {
+            let progressBar = document.getElementById('gesture-progress-bar');
+            if (!progressBar) {
+                progressBar = document.createElement('div');
+                progressBar.id = 'gesture-progress-bar';
+                progressBar.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 200px;
+                    height: 8px;
+                    background: rgba(255,255,255,0.3);
+                    border-radius: 4px;
+                    z-index: 9999;
+                    border: 1px solid rgba(255,255,255,0.5);
+                `;
+                
+                const progressFill = document.createElement('div');
+                progressFill.id = 'gesture-progress-fill';
+                progressFill.style.cssText = `
+                    height: 100%;
+                    background: linear-gradient(90deg, #2874f0, #00ff00);
+                    border-radius: 4px;
+                    transition: width 0.3s ease;
+                    width: 0%;
+                `;
+                
+                progressBar.appendChild(progressFill);
+                document.body.appendChild(progressBar);
+            }
+            
+            const progress = Math.min(100, (Math.abs(gestureState.rotateCount) / (GESTURE_CONFIG.REQUIRED_ROTATIONS * 2)) * 100);
+            const progressFill = document.getElementById('gesture-progress-fill');
+            if (progressFill) {
+                progressFill.style.width = `${progress}%`;
+            }
+        }
+
+        function hideGestureProgress() {
+            const progressBar = document.getElementById('gesture-progress-bar');
+            if (progressBar) {
+                progressBar.remove();
+            }
+        }
+
+        // Keyboard shortcut for development
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.key === 'A') {
+                console.log('Keyboard admin shortcut activated');
+                activateAdminMode();
+            }
+        });
+
+        // Double tap with three fingers
+        let tripleTapCount = 0;
+        let tripleTapTimer;
+
+        document.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 3) {
+                tripleTapCount++;
+                
+                if (tripleTapCount === 1) {
+                    tripleTapTimer = setTimeout(() => {
+                        tripleTapCount = 0;
+                    }, 1000);
+                }
+                
+                if (tripleTapCount === 3) {
+                    clearTimeout(tripleTapTimer);
+                    tripleTapCount = 0;
+                    console.log('Triple tap with three fingers detected!');
+                    activateAdminMode();
+                }
+            }
+        });
+
+        // Secret click sequence (click corners)
+        let clickSequence = [];
+        let sequenceTimer;
+
+        document.addEventListener('click', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            
+            // Check if click is in corner (within 50px of corner)
+            if ((x < 50 && y < 50) || // Top-left
+                (x > width - 50 && y < 50) || // Top-right
+                (x < 50 && y > height - 50) || // Bottom-left
+                (x > width - 50 && y > height - 50)) { // Bottom-right
+                
+                clickSequence.push({x, y});
+                clearTimeout(sequenceTimer);
+                sequenceTimer = setTimeout(() => {
+                    clickSequence = [];
+                }, 2000);
+                
+                // Check for pattern: Top-left → Top-right → Bottom-right → Bottom-left
+                if (clickSequence.length >= 4) {
+                    const pattern = clickSequence.slice(-4);
+                    const isPattern = 
+                        pattern[0].x < 50 && pattern[0].y < 50 && // Top-left
+                        pattern[1].x > width - 50 && pattern[1].y < 50 && // Top-right
+                        pattern[2].x > width - 50 && pattern[2].y > height - 50 && // Bottom-right
+                        pattern[3].x < 50 && pattern[3].y > height - 50; // Bottom-left
+                    
+                    if (isPattern) {
+                        console.log('Secret corner pattern detected!');
+                        activateAdminMode();
+                        clickSequence = [];
+                    }
+                }
+            }
+        });
+
+        // Special gesture for 404 page - shake to go home
+        let shakeCount = 0;
+        let lastShakeTime = 0;
+
+        function handleDeviceMotion(e) {
+            const acceleration = e.accelerationIncludingGravity;
+            const shakeThreshold = 15;
+            
+            if (acceleration && (Math.abs(acceleration.x) > shakeThreshold || 
+                                Math.abs(acceleration.y) > shakeThreshold || 
+                                Math.abs(acceleration.z) > shakeThreshold)) {
+                
+                const now = Date.now();
+                if (now - lastShakeTime > 1000) {
+                    shakeCount = 0;
+                }
+                
+                shakeCount++;
+                lastShakeTime = now;
+                
+                if (shakeCount >= 3) {
+                    shakeCount = 0;
+                    console.log('Shake gesture detected! Going home...');
+                    
+                    // Visual feedback for shake
+                    document.body.style.backgroundColor = '#2874f0';
+                    setTimeout(() => {
+                        document.body.style.backgroundColor = '';
+                        window.location.href = 'index.html';
+                    }, 500);
+                }
+            }
+        }
+
+        // Request devic
