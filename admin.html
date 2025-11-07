@@ -3,168 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Panel - Dinhata Shop</title>
+    <title>Admin Panel - Dinhata Buzzer Hub</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js" defer></script>
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         .admin-container {
-            max-width: 800px;
-            margin: 120px auto;
+            max-width: 1200px;
+            margin: 100px auto 50px;
             padding: 20px;
         }
-        .admin-form {
-            background: #1a1a1a;
-            padding: 25px;
-            border-radius: 14px;
-            margin-bottom: 25px;
-            border: 1px solid #333;
-        }
-        .admin-form input {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 8px;
-            border: 1px solid #444;
-            background: #0d0d0d;
-            color: white;
-        }
-        .admin-form button {
-            width: 100%;
-            margin-top: 10px;
-            padding: 12px;
-            background: #ffcc66;
-            color: #000;
-            border: none;
-            font-weight: 700;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        .product-item {
+
+        .admin-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: #222;
-            padding: 15px;
-            border-radius: 8px;
-            margin: 10px 0;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e0e0e0;
         }
+
+        .admin-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .admin-tab {
+            padding: 10px 20px;
+            background: #f5f5f5;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .admin-tab.active {
+            background: #2874f0;
+            color: white;
+        }
+
+        .admin-section {
+            display: none;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .admin-form {
+            max-width: 500px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .admin-btn {
+            background: #2874f0;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        .product-list {
+            display: grid;
+            gap: 20px;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+
+        .product-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+
+        .product-details {
+            flex: 1;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 10px;
+        }
+
         .delete-btn {
             background: #ff4444;
-            border: none;
             color: white;
-            padding: 8px 12px;
+            border: none;
+            padding: 8px 15px;
             border-radius: 5px;
             cursor: pointer;
         }
-        #statusMessage {
-            background: #222;
-            padding: 10px;
+
+        .orders-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .order-item {
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .order-status {
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-pending { background: #fff3cd; color: #856404; }
+        .status-confirmed { background: #d1ecf1; color: #0c5460; }
+        .status-delivered { background: #d4edda; color: #155724; }
+
+        .password-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .password-box {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 400px;
             text-align: center;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            border: 1px solid #444;
+        }
+
+        .password-box input {
+            width: 100%;
+            padding: 12px;
+            margin: 15px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
         }
     </style>
 </head>
-<body>
-
-<header>
-    <div class="logo">Dinhata Shop</div>
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="products.html">Products</a>
-        <a href="cart.html">Cart</a>
-        <a href="admin.html" style="color:#ffcc66;">Admin</a>
-    </nav>
-</header>
-
-<div class="admin-container">
-
-    <div id="statusMessage">Admin Panel Ready</div>
-
-    <h2>Add New Product</h2>
-
-    <form class="admin-form" id="addProductForm">
-        <input type="text" id="pName" placeholder="Product Name" required>
-        <input type="number" id="pPrice" placeholder="Price" required>
-        <input type="text" id="pImage" placeholder="Image URL" required>
-        <input type="text" id="pCategory" placeholder="Category" required>
-        <button type="submit">Add Product</button>
-    </form>
-
-    <h2>Manage Products (<span id="productCount">0</span>)</h2>
-    <div id="adminProductList">Loading...</div>
-</div>
-
-<script>
-    document.addEventListener("DOMContentLoaded", () => {
-        updateStatus("Admin Panel Loaded");
-
-        loadAdminProducts();
-
-        document.getElementById("addProductForm").addEventListener("submit", (e) => {
-            e.preventDefault();
-
-            const newProduct = {
-                id: Date.now(),
-                name: document.getElementById("pName").value,
-                price: parseInt(document.getElementById("pPrice").value),
-                img: document.getElementById("pImage").value,
-                cat: document.getElementById("pCategory").value
-            };
-
-            const products = getProducts();
-            products.push(newProduct);
-            saveProducts(products);
-
-            updateStatus("✅ Product Added Successfully!");
-            e.target.reset();
-            loadAdminProducts();
-        });
-    });
-
-    function updateStatus(msg) {
-        document.getElementById("statusMessage").innerText = msg;
-    }
-
-    function loadAdminProducts() {
-        const container = document.getElementById("adminProductList");
-        const count = document.getElementById("productCount");
-        const products = getProducts();
-
-        count.innerText = products.length;
-
-        if (products.length === 0) {
-            container.innerHTML = `<p>No products found.</p>`;
-            return;
-        }
-
-        container.innerHTML = products.map(p => `
-            <div class="product-item">
-                <div style="display:flex; align-items:center;">
-                    <img src="${p.img}" width="60" style="border-radius:5px; margin-right:12px;">
-                    <div>
-                        <b>${p.name}</b><br>
-                        ৳${p.price} | ${p.cat}
-                    </div>
-                </div>
-                <button class="delete-btn" onclick="deleteProduct(${p.id})">Delete</button>
-            </div>
-        `).join('');
-    }
-
-    function deleteProduct(id) {
-        if (!confirm("Delete this product?")) return;
-
-        let products = getProducts();
-        products = products.filter(p => p.id !== id);
-
-        saveProducts(products);
-        updateStatus("❌ Product Deleted");
-        loadAdminProducts();
-    }
-</script>
-
-</body>
-</html>
+<body
